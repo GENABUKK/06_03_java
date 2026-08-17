@@ -2,28 +2,27 @@ name: CI
 
 on:
   push:
-    branches:
-      - master
-      - main
+    branches: [ main, master ]
 
 jobs:
   build:
-    runs-on: ubuntu-20.04
-    # TODO: укажите нужные permissions для GITHUB_TOKEN
+    runs-on: ubuntu-latest
+
     permissions:
-      укажите_название: read
-      укажите_название: write
+      contents: read
+      packages: write
+
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v3
-      # TODO: укажите нужные значения для action setup-java
-      - name: Setup Java
-        uses: укажите_значение
-        with:
-          distribution: укажите_значение
-          java-version: укажите_значение
-      - name: Build & Deploy
-        run:
-          mvn -B deploy
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: Checkout Code
+      uses: actions/checkout@v4
+
+    - name: Setup Java
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'temurin'
+        java-version: '17'
+
+    - name: Build & Deploy
+      run: mvn -B deploy
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
